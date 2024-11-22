@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./app
 
     steps:
     - name: Checkout
@@ -27,6 +24,7 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
+      working-directory: ./app
     - name: Configure AWS CLI
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -35,3 +33,4 @@ jobs:
          aws-region: ${{ secrets.AWS_REGION }}
     - name: Deploy
       run: pnpm run deploy
+      working-directory: ./app
