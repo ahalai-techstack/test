@@ -22,6 +22,8 @@ jobs:
       with:
         node-version: 20
         cache: 'pnpm'
+    - name: Install dependencies
+      run: pnpm install
     - name: Configure AWS CLI
       uses: aws-actions/configure-aws-credentials@v4
       with:
