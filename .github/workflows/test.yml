@@ -21,6 +21,7 @@ jobs:
 
     env:
       ENVIRONMENT: ${{ github.ref_name }}
+      working-directory: ./client
 
     steps:
       - name: Checkout Repository
@@ -38,7 +39,7 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install
-        working-directory: ./client
+        working-directory: ${{ env.working-directory }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -49,10 +50,11 @@ jobs:
 
       - name: Build application
         run: pnpm run build
-        working-directory: ./client
+        working-directory: ${{ env.working-directory }}
 
       - name: Deploy to AWS S3
         run: aws s3 sync build {{ secrets.AWS_S3_URL }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
