@@ -5,15 +5,6 @@ on:
     branches: [ "main", "staging", "development" ]
 
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Select deployment environment'
-        required: true
-        type: choice
-        options:
-          - development
-          - staging
-          - production
 
 jobs:
   deploy:
@@ -50,15 +41,15 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Build application
         run: pnpm run build
         working-directory: ${{ env.working-directory }}
 
       - name: Deploy to AWS S3
-        run: aws s3 sync build {{ secrets.AWS_S3_URL }}
+        run: aws s3 sync build {{ vars.AWS_S3_URL }}
         working-directory: ${{ env.working-directory }}
 
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
