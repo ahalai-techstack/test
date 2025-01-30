@@ -13,7 +13,7 @@ on:
         options:
           - development
           - staging
-          - production
+          - main
 
 jobs:
   deploy:
@@ -57,8 +57,8 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: Deploy to AWS S3
-        run: aws s3 sync build {{ secrets.AWS_S3_URL }}
+        run: aws s3 sync build {{ vars.AWS_S3_URL }}
         working-directory: ${{ env.working-directory }}
 
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
