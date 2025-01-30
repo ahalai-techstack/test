@@ -28,8 +28,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Echo env
-        run: echo ${{ env.TEST }}
+      - name: Echo var test
+        run: echo ${{ vars.TEST }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
