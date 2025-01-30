@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Echo env
-        run: echo ${{ secret.ACCESSKEY }}
+        run: echo ${{ secrets.ACCESSKEY }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
