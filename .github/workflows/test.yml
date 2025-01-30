@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "master", "staging", "development" ]
+    branches: [ "main", "staging", "development" ]
 
   workflow_dispatch:
     inputs:
