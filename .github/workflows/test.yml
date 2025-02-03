@@ -12,14 +12,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: >
-      ${{ 
-        fromJson('{
-          "main": "prod_test",
-          "development": "dev_test",
-          "staging": "staging_test"
-        }')[github.ref_name] 
-      }}
+    environment: "${{ 
+      fromJson('{
+        \"main\": \"prod_test\", 
+        \"development\": \"dev_test\", 
+        \"staging\": \"staging_test\"
+      }')[github.ref_name] 
+    }}"
+
     env:
       working-directory: ./app
 
