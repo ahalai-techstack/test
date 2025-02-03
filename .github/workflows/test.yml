@@ -49,14 +49,3 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Build application
-        run: pnpm run build
-        working-directory: ${{ env.working-directory }}
-
-      - name: Deploy to AWS S3
-        run: aws s3 sync build ${{ vars.AWS_S3_URL }}
-        working-directory: ${{ env.working-directory }}
-
-      - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
