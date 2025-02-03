@@ -1,17 +1,25 @@
 name: CD
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches: [ "main", "staging", "development" ]
-
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: "${{ fromJson('{\"main\": \"prod_test\", \"development\": \"dev_test\", \"staging\": \"staging_test\"}')[github.ref_name] }}"
-
-
+    environment: >
+      ${{ 
+        fromJson('{
+          "main": "prod_test",
+          "development": "dev_test",
+          "staging": "staging_test"
+        }')[github.ref_name] 
+      }}
     env:
       working-directory: ./app
 
@@ -36,20 +44,8 @@ jobs:
         run: pnpm install
         working-directory: ${{ env.working-directory }}
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Build application
-        run: pnpm run build
-        working-directory: ${{ env.working-directory }}
-
-      - name: Deploy to AWS S3
-        run: aws s3 sync build {{ vars.AWS_S3_URL }}
-        working-directory: ${{ env.working-directory }}
-
-      - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
