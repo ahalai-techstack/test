@@ -49,3 +49,6 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
+
+      - name: ls s3
+        run: aws s3 ls s3://finance-frontend-deployment
