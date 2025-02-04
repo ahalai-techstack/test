@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Echo var
-        run: echo ${{ vars.TEST }}
+        run: echo ${{ vars.AWS_ROLE_ARN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
