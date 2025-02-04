@@ -47,8 +47,8 @@ jobs:
       - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: arn:aws:iam::688390514828:role/FrontendDevEnvDeploymentRole
+          aws-region: eu-central-1
 
       - name: ls s3
         run: aws s3 ls s3://finance-frontend-deployment
